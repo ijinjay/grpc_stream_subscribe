@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package proto;
+
+message GrpcCommonConfig {
+  optional int32 grpc_keepalive_time_ms = 1 [ default = 10000 ];
+  optional int32 grpc_keepalive_timeout_ms = 2 [ default = 5000 ];
+  optional int32 grpc_max_connection_idle_ms = 3 [ default = 10000 ];
+  optional int32 grpc_keepalive_permit_without_calls = 4 [ default = 1 ];
+  optional int32 grpc_max_pings_without_data = 5 [ default = 0 ];
+  optional int32 grpc_min_ping_interval_without_data_ms = 6 [ default = 5000 ];
+  optional int32 grpc_max_message_length = 7 [ default = -1 ];
+  optional int32 grpc_channel_connect_time_ms = 8 [ default = 500 ];
+}
+
+message GrpcServerConfig {
+  optional string host = 1;
+  optional int32 port = 2 [ default = 50055 ];
+  optional bool enable_tls = 3 [ default = false ];
+  optional string certfile = 4;
+  optional string keyfile = 5;
+  optional GrpcCommonConfig grpc_common = 6;
+}
+
+message GrpcClientConfig {
+  optional string server_host = 1 [ default = "localhost" ];
+  optional int32 port = 2 [ default = 50055 ];
+  optional bool enable_tls = 3 [ default = false ];
+  optional GrpcCommonConfig grpc_common = 4;
+  optional string certfile = 5;
+}

@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package proto;
+
+service SubscribeService {
+  rpc Subscribe(SubscribeRequest) returns (stream SubscribeResponse) {}
+  rpc Publish(PublishRequest) returns (PublishResponse) {}
+}
+
+message SubscribeRequest {
+  optional string topic = 1;
+  optional string id = 2;
+}
+
+message SubscribeResponse { optional string message = 1; }
+
+message PublishRequest {
+  optional string topic = 1;
+  optional string message = 2;
+}
+
+message PublishResponse { optional string message = 1; }
