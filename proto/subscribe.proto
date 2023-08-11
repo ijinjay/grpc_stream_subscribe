@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package proto;
 
@@ -8,15 +8,15 @@ service SubscribeService {
 }
 
 message SubscribeRequest {
-  optional string topic = 1;
-  optional string id = 2;
+  string topic = 1;
+  string id = 2;
 }
 
-message SubscribeResponse { optional string message = 1; }
+message SubscribeResponse { string message = 1; }
 
 message PublishRequest {
-  optional string topic = 1;
-  optional string message = 2;
+  string topic = 1;
+  string message = 2;
 }
 
-message PublishResponse { optional string message = 1; }
+message PublishResponse { string message = 1; }

@@ -13,12 +13,11 @@ class TestSubscribe:
             root_certs = open(client_ca, "rb").read()
             credentials = grpc.ssl_channel_credentials(root_certs)
             channel = grpc.secure_channel(
-                f"{CLIENT_CONFIG.server_host}:{CLIENT_CONFIG.port}", credentials
-            )
+                f"{CLIENT_CONFIG.server_host}:{CLIENT_CONFIG.port}",
+                credentials)
         else:
             channel = grpc.insecure_channel(
-                f"{CLIENT_CONFIG.server_host}:{CLIENT_CONFIG.port}"
-            )
+                f"{CLIENT_CONFIG.server_host}:{CLIENT_CONFIG.port}")
         stub = subscribe_pb2_grpc.SubscribeServiceStub(channel)
         return stub
 
@@ -27,7 +26,8 @@ class TestSubscribe:
         response = grpc_stub.Subscribe(request)
         assert next(response)
 
-        pub_request = subscribe_pb2.PublishRequest(topic="test", message="hello")
+        pub_request = subscribe_pb2.PublishRequest(topic="test",
+                                                   message="hello")
         pub_response = grpc_stub.Publish(pub_request)
         assert pub_response.message == "OK"
         assert next(response).message == "hello"

@@ -1,3 +1,8 @@
-pip install -r requirements.txt
+#!/bin/bash
 
-find proto -name "*.proto" -print | xargs python -m grpc_tools.protoc --proto_path=./ --python_out ./ --grpc_python_out=./
+WORK_DIR=$(cd "$(dirname "$0")" && pwd)
+echo "work dir: $WORK_DIR"
+
+cd "$WORK_DIR"  || exit
+pip install -r requirements.txt
+find proto -name "*.proto" -print0 | xargs -0 python -m grpc_tools.protoc --proto_path=./ --python_out ./ --grpc_python_out=./

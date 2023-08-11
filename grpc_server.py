@@ -16,8 +16,10 @@ def server():
     grpc_server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=os.cpu_count() + 4),
         options=(
-            ("grpc.keepalive_time_ms", config.grpc_common.grpc_keepalive_time_ms),
-            ("grpc.keepalive_timeout_ms", config.grpc_common.grpc_keepalive_timeout_ms),
+            ("grpc.keepalive_time_ms",
+             config.grpc_common.grpc_keepalive_time_ms),
+            ("grpc.keepalive_timeout_ms",
+             config.grpc_common.grpc_keepalive_timeout_ms),
             (
                 "grpc.max_send_message_length",
                 config.grpc_common.grpc_max_message_length,
@@ -45,18 +47,18 @@ def server():
         ),
     )
     subscribe_pb2_grpc.add_SubscribeServiceServicer_to_server(
-        SubscribeServicer(), grpc_server
-    )
-    port = config.port
+        SubscribeServicer(), grpc_server)
     if config.enable_tls:
-        logger.info("Enable TLS with %s and %s", config.certfile, config.keyfile)
+        logger.info("Enable TLS with %s and %s", config.certfile,
+                    config.keyfile)
         try:
             private_key = open(config.keyfile, "rb").read()
             cert_chain = open(config.certfile, "rb").read()
         except:
             raise Exception("Failed to read keyfile or certfile")
         credentials = grpc.ssl_server_credentials([private_key, cert_chain])
-        grpc_server.add_secure_port(f"{config.host}:{config.port}", credentials)
+        grpc_server.add_secure_port(f"{config.host}:{config.port}",
+                                    credentials)
     else:
         logger.info("Disable TLS, using insecure mode")
         grpc_server.add_insecure_port(f"{config.host}:{config.port}")

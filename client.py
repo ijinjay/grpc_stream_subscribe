@@ -13,10 +13,10 @@ class SubscribeCilent:
             root_certs = open(client_ca, "rb").read()
             credentials = grpc.ssl_channel_credentials(root_certs)
             channel = grpc.secure_channel(
-                f"{config.server_host}:{config.port}", credentials
-            )
+                f"{config.server_host}:{config.port}", credentials)
         else:
-            channel = grpc.insecure_channel(f"{config.server_host}:{config.port}")
+            channel = grpc.insecure_channel(
+                f"{config.server_host}:{config.port}")
         self.stub = subscribe_pb2_grpc.SubscribeServiceStub(channel)
 
     def subscribe(self, identifier: str, topic: str) -> None:

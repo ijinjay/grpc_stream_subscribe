@@ -14,7 +14,8 @@ from proto import (
 )
 
 logging.basicConfig(
-    format="%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+    format=
+    "%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
     datefmt="%Y-%m-%d:%H:%M:%S",
 )
 
@@ -28,7 +29,8 @@ class SubscribeServicer(subscribe_pb2_grpc.SubscribeServiceServicer):
         self.topic_messages = collections.defaultdict()
 
     def Subscribe(
-        self, request: subscribe_pb2.SubscribeRequest, context: grpc.ServicerContext
+        self, request: subscribe_pb2.SubscribeRequest,
+        context: grpc.ServicerContext
     ) -> Iterator[subscribe_pb2.SubscribeResponse]:
         self.logger.info(f"{request.id} subscribe to {request.topic}")
         if request.topic not in self.subscribers:
@@ -47,20 +49,18 @@ class SubscribeServicer(subscribe_pb2_grpc.SubscribeServiceServicer):
 
         context.add_callback(on_rpc_done)
         yield subscribe_pb2.SubscribeResponse(
-            message=f"Welcome {request.id} to {request.topic}"
-        )
+            message=f"Welcome {request.id} to {request.topic}")
 
         while request.id in self.subscribers[request.topic]:
             if request.topic in self.topic_messages:
                 yield subscribe_pb2.SubscribeResponse(
-                    message=f"{self.topic_messages[request.topic]}"
-                )
+                    message=f"{self.topic_messages[request.topic]}")
             with state:
                 state.wait()
 
     def Publish(
-        self, request: subscribe_pb2.PublishRequest, context: grpc.ServicerContext
-    ) -> subscribe_pb2.PublishResponse:
+            self, request: subscribe_pb2.PublishRequest,
+            context: grpc.ServicerContext) -> subscribe_pb2.PublishResponse:
         self.logger.info("Publish %s to %s", request.message, request.topic)
         if request.topic in self.subscribers:
             with self.lock:
